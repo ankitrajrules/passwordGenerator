@@ -191,8 +191,10 @@ function App() {
 						</div>
 					</div>
 				</div>
-				{(isHistoryVisible || !isNotLaptop) && (
-					<div className="history-cards">
+				{
+				// (isHistoryVisible || !isNotLaptop) &&
+				 (
+					<div className={`history-cards ${isHistoryVisible ? 'appear' : ''}`}>
 						{isHistoryVisible && isNotLaptop && (
 							<button onClick={() => setIsHistoryVisible(!isHistoryVisible)}>
 								{isHistoryVisible ? "Hide" : "Show"}
