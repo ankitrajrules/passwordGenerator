@@ -134,3 +134,14 @@ code {
     display: none;
   }
 }
+.history {
+	transition: all 1s ease-in-out;
+	opacity: 0;
+	overflow: hidden;
+  }
+  
+.history.visible {
+	opacity: 1;
+	max-height: 500px; /* Adjust this value to fit your content */
+  }
+  

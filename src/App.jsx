@@ -92,10 +92,13 @@ function App() {
 			<div className="main-container">
 				<div className="generator">
 					<h1>Random Password Generator</h1>
-					{isNotLaptop && (
-						<button onClick={() => setIsHistoryVisible(!isHistoryVisible)}>
-							{isHistoryVisible ? "Hide" : "Show"}
-						</button>
+					{isNotLaptop  && (
+						<div className={`history ${previousPasswords.length > 0 ? 'visible' : ''}`}>
+							<p>History</p>
+							<button onClick={() => setIsHistoryVisible(!isHistoryVisible)}>
+								{isHistoryVisible ? "Hide" : "Show"}
+							</button>
+						</div>
 					)}
 
 					<div className="cardSelection">
