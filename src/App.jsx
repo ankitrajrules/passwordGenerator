@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import clipboardIcon from "./assets/clipboard-regular.svg";
 import "./App.css";
 import HistoryCard from "./components/HistoryCard.jsx";
@@ -12,7 +12,8 @@ function App() {
 	const [useUpperCase, setUseUpperCase] = useState(true);
 	const [useLowerCase, setUseLowerCase] = useState(true);
 	const [previousPasswords, setPreviousPasswords] = useState([]);
-	const [isHistoryVisible, setIsHistoryVisible] = useState(window.innerWidth > 768);
+	const [isHistoryVisible, setIsHistoryVisible] = useState(false);
+	const [isNotLaptop, setIsNotLaptop] = useState(window.innerWidth <= 768);
 
 	let specialCharacters = useSpecialCharacters
 		? " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
@@ -38,22 +39,65 @@ function App() {
 	};
 	const getPasswordStrength = (password) => {
 		let strength = 0;
-		if (password.length > 8) strength++;
-		if (password.match(/[a-z]+/)) strength++;
-		if (password.match(/[A-Z]+/)) strength++;
-		if (password.match(/[0-9]+/)) strength++;
-		if (password.match(/[ !\"#$%&'()*+,-./:;<=>?@[\\]\^_`{\|}~]\+/)) strength++;
+
+		// Check the length of the password
+		if (password.length >= 8) {
+			strength++;
+			console.log("length");
+		}
+
+		// Check for uppercase letters
+		if (password.match(/[A-Z]/)) {
+			strength++;
+			console.log("upper");
+		}
+
+		// Check for lowercase letters
+		if (password.match(/[a-z]/)) {
+			strength++;
+			console.log("lower");
+		}
+
+		// Check for numbers
+		if (password.match(/[0-9]/)) {
+			strength++;
+			console.log("number");
+		}
+
+		// Check for special characters
+		if (password.match(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/)) {
+			strength++;
+			console.log("special");
+		}
+
 		console.log(strength);
 		return strength;
 	};
+
+	useEffect(() => {
+		const handleResize = () => {
+			setIsNotLaptop(window.innerWidth <= 768);
+		};
+
+		window.addEventListener("resize", handleResize);
+		console.log(isHistoryVisible);
+		console.log(isNotLaptop);
+		return () => {
+			window.removeEventListener("resize", handleResize);
+		};
+	}, [window.innerWidth]);
+
 	return (
 		<>
 			<div className="main-container">
 				<div className="generator">
 					<h1>Random Password Generator</h1>
-					<button onClick={() => setIsHistoryVisible(!isHistoryVisible)}>
-						{isHistoryVisible ? "Hide" : "Show"}
-					</button>
+					{isNotLaptop && (
+						<button onClick={() => setIsHistoryVisible(!isHistoryVisible)}>
+							{isHistoryVisible ? "Hide" : "Show"}
+						</button>
+					)}
+
 					<div className="cardSelection">
 						<p className="read-the-docs">Enter the length of password</p>
 						<input
@@ -144,12 +188,14 @@ function App() {
 						</div>
 					</div>
 				</div>
-				{isHistoryVisible && (
+				{(isHistoryVisible || !isNotLaptop) && (
 					<div className="history-cards">
+						{isHistoryVisible && isNotLaptop && (
+							<button onClick={() => setIsHistoryVisible(!isHistoryVisible)}>
+								{isHistoryVisible ? "Hide" : "Show"}
+							</button>
+						)}
 						<h1>Previous Passwords</h1>
-						<button onClick={() => setIsHistoryVisible(!isHistoryVisible)}>
-						{isHistoryVisible ? "Hide" : "Show"}
-					</button>
 						{/* Use the state to conditionally render the history container */}
 
 						<div className="password-card-container">

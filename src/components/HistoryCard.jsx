@@ -6,15 +6,17 @@ const HistoryCard = ({ password, strength, index }) => {
 	return (
 		<div className="card">
 			<h2>Password {index}</h2>
+			<div className="clipboardIconRemainsOnSide">
 			<p>
-				<code style={{ color: strength > 3 ? ( strength > 4 ? "green": "yellow"): "red" }}>{password}</code>
+				<code style={{ color: strength > 3 ? ( strength > 4 ? ( strength==5 ?"green":"yellowgreen"): "yellow"): "red" }}>{password}</code>
 			</p>
 			<Clipboard
-				style={{ marginLeft: "10px", cursor: "pointer" }}
+				style={{ margin: "auto", marginLeft: "10px", cursor: "pointer" }}
 				data-clipboard-text={password}
 			>
 				<img src={clipboardIcon} alt="clipboard" />
 			</Clipboard>
+			</div>
 		</div>
 	);
 };
